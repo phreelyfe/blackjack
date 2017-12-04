@@ -48,8 +48,12 @@ void DisplayInstructions();
  */
 int main()
 {
-	// Get reference to users chioce
+	// Skip flag: will skip steps if truthy
+	bool skip = false;
+	// Get reference to users choice
 	string choice;
+	string choices[] = {"A", "B", "C", "D", "E"};
+	const int LENGTH_OF_CHOICES = GetArrayLength(choices);
  	
  	// Set up the console
  	InitializeConsolePreferences(); 
@@ -57,36 +61,48 @@ int main()
  	// Loop the program
 	do 
 	{
-		// Start with a clear console
-		ClearScreen();
-		
-		// Welcome the user and display the gameplay menu
-		cout 	<< "Welcome to Black Jack!" << endl
-				<< "What would you like to do?" << endl << endl;
-
 		// Display the gameplay menu and store the choice
-		choice = DisplayGameplayMenu();
+		// If skip flag is true ignore this line
+		if (!skip) choice = ConvertCase("upper", DisplayGameplayMenu());
+		// Reset the skip flag each time
+		skip = false;
 	
 		// Compare choices
-		if(ConvertCase("upper", choice) =="A") {
-			cout 	<< "Chose A";
+		if(choice == choices[0])
+		{
+			cout 	<< "Chose " << choices[0] << endl;
 		}
 
-		if(ConvertCase("upper", choice) =="B") {
-			cout 	<< "Chose B";
+		else if(choice == choices[1])
+		{
+			cout 	<< "Chose " << choices[1] << endl;
 		}
 
-		if(ConvertCase("upper", choice) =="C") {
+		else if(choice == choices[2])
+		{
 			// Show the instructions menu
 			DisplayInstructions();
 		}
 
-		if(ConvertCase("upper", choice) =="D") {
-			cout 	<< "Chose D";
+		else if(choice == choices[3])
+		{
+			cout 	<< "Chose " << choices[2] << endl;
 		}
 
-		if(ConvertCase("upper", choice) =="E") {
-			cout 	<< "Chose E";
+		else if(choice == choices[4])
+		{
+			cout 	<< "Chose " << choices[3] << endl;
+		}
+
+		else 
+		{
+			// Failed to recognize a correct choice
+			// Enable skip to ignore outputting menu next loop
+			skip = true;
+			// Notify the user
+			cout 	<< "Choice not recognized. Try again!...";
+			// Get the choice again, this time, loop until correct
+			choice = ConvertCase("upper", GetString(choices, LENGTH_OF_CHOICES));
 		}
 	}
   	while (ConvertCase("upper", choice) != "E");
@@ -100,7 +116,12 @@ int main()
  */
 string DisplayGameplayMenu()
 {
-	// Output
+	// Start with a clear console
+	ClearScreen();
+	// Welcome the user and display the gameplay menu
+	cout 	<< "Welcome to Black Jack!" 			<< endl
+			<< "What would you like to do?" << endl << endl;
+	// Output the menu
 	cout 	<< setw(5) << right << "A. " << left << "Begin Game" 				<< endl
 			<< setw(5) << right << "B. " << left << "Configure Game Options" 	<< endl
 			<< setw(5) << right << "C. " << left << "Read Instructions" 		<< endl
@@ -126,5 +147,4 @@ void DisplayInstructions()
 
 	// Get any key to exit instructions
 	PauseConsole();
-
 }

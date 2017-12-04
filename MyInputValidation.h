@@ -21,8 +21,10 @@
 #include <iomanip>
 #include <climits> // for limits of a int INT_MIN and INT_MAX
 #include <cfloat>  // for limits of a double DBL_MIN and DBL_MAX
+#include "Helpers.h"
 
 using namespace std;
+using namespace CPP_Helpers;
 
 namespace myValidation
 {
@@ -30,7 +32,7 @@ namespace myValidation
 	 * Gets a valid int value from the console with range checking
 	 *
 	 * @param  MIN the minimum value the user may enter; defaults to the minimum double.
-	 * @param  MIN the minimum value the user may enter; defaults to the maximum double.
+	 * @param  MAX the minimum value the user may enter; defaults to the maximum double.
 	 * @return A validated int input by the user.
 	*/
 	int GetValidInteger(const int MIN = INT_MIN, const int MAX = INT_MAX);
@@ -39,7 +41,7 @@ namespace myValidation
 	 * Gets a valid double value from the console with range checking
 	 *
 	 * @param  MIN the minimum value the user may enter; defaults to the minimum double.
-	 * @param  MIN the minimum value the user may enter; defaults to the maximum double.
+	 * @param  MAX the minimum value the user may enter; defaults to the maximum double.
 	 * @return A validated double input by the user.
 	*/
 	double GetValidDouble(const double MIN = -DBL_MAX, const double MAX = DBL_MAX);
@@ -48,7 +50,6 @@ namespace myValidation
 	 *	Clears the input buffer and resets the fail state of an istream object. 
 	 *
 	 *	@param		in (istream object by ref) - the object to clear & reset; defaults to cin.
-	 *	@return		none.
 	*/
 	void ClearInputBuffer(istream &in = cin); // function prototype
 	
@@ -114,6 +115,41 @@ namespace myValidation
 	       } 
 	       
 	       return validString; // returns a valid value to the calling function.
+	}
+
+	// GetString function definition
+	string GetString(string array[], int ARRAY_SIZE)
+	{
+		// Is index of flag
+		bool isIndexOf = false;
+		// Get size of the array
+       string validString; // holds the user input
+       
+	   cin >> validString;       // try to get input
+       if(cin.fail())            // if user input fails...
+       {
+           // reset the cin object and clear the buffer.
+		   ClearInputBuffer(cin);
+           // report the problem to the user.
+           cerr << "\nInvalid input. Please try again.\n";
+           // Try again by calling the function again (recursion)
+           validString = GetString(array, ARRAY_SIZE);
+       }
+
+       // Check if the string is a valid choice
+       for( int i = 0; i < ARRAY_SIZE; i++ )
+       {
+       		if (array[i] == ConvertCase("upper", validString))
+       			isIndexOf = true;
+       }
+
+       // if there's no valid string, get string again
+       if (!isIndexOf) {
+       		cout 	<< "Choice not recognized. Try again!...";
+       		validString = GetString(array, ARRAY_SIZE);
+       }
+       
+       return validString; // returns a valid value to the calling function.
 	}
 	
 	// ClearInputBuffer function definition

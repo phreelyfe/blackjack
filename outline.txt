@@ -1,0 +1,36 @@
+OOP Final Project Objects List
+
+Card
+	Suit
+	Rank
+	VisibleFace
+	Owner
+
+Deck
+	List(Cards)
+	MaxNumberOfCards
+
+Table
+	Score
+	Players
+	MaxNumberOfPlayers
+	Pot
+	Bets
+	PlayerInFocus
+
+Dealer Options
+	Actions([Hand], Table)
+
+AI Options: Extends Player Options
+	Decision(Hand: player, Hand: dealer, Table)
+
+Player Options
+	Actions(Hand: player, Hand: dealer, Table)
+
+Hand
+	PlayerType
+	List(Cards)
+
+Features
+	Game Log: Record all gameplay actions
+	Persistent Statistics: Store game log externally

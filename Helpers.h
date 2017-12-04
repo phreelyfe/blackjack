@@ -2,10 +2,14 @@
  *	
  *	A re-usable library of helpful console functions.
  *	   
- *	@author		Raymond Thompson
- *	@version	2017.12
- *	@since		3 Dec 2017
- *	@info 		Common helpful functions for cross platform use
+ *	@author				Raymond Thompson
+ *	@version			2017.12
+ *	@since				3 Dec 2017
+ *	@info 				Common helpful functions for cross platform use
+ *
+ *	@credits			ClearScreen: http://www.dreamincode.net/forums/topic/90898-cross-platform-clear-screen/
+ *						PauseConsole: http://www.cplusplus.com/forum/beginner/36318/
+ *
 */
 
 #ifndef _CPP_HELPERS
@@ -14,31 +18,27 @@
 
 #include <iostream>
 #include <algorithm>
+#include <stdio.h>
+#include <stdlib.h> //For system commands
+
 
 using namespace std;
 
 namespace CPP_Helpers
 {
+	//Detect and define which command to use
+	#ifndef WIN32
+		#define COMMAND "clear" //Clears a linux console screen
+	#else
+		#define COMMAND "cls" //Clears a windows console screen
+	#endif
+
 	/** ClearScreen() 	function: determines the os and executes the
 	 *					appropriate clear command
 	 */
-	void ClearScreen()
-	{
-		// Determine if there is a TERM variable set
-		// so we can run the appropriate clear command
-		// for that system
-		const bool DEFINED = getenv("TERM") ? true : false;
-	
-		#ifdef POSIX
-			// System is POSIX/Linux based
-		    system("clear");
-		#elif WINDOWS
-			// System is windows based
-		    system("cls");
-		#else
-		    // System is likely windows based
-		    system("cls");
-		#endif
+	void ClearScreen() {
+		// Run the appropriate system command
+		system( COMMAND );
 	}
 
 	/** PauseConsole() 	function: universal press any key function
@@ -52,12 +52,12 @@ namespace CPP_Helpers
 		ClearScreen();
 	}
 
-	/** ConvertCase() 	function: converts a string to either upper or lower case
-	 *	@param			string: either 'upper' or 'lower' representing 
-	 * 					the case to convert to
-	 *	@param			string: the string to convert
+	/** ConvertCase() 	        function: converts a string to either upper or lower case
+     *	@param type             either 'upper' or 'lower' representing
+	 * 					        the case to convert to
+	 *	@param toBeConverted    the string to convert
 	 *
-	 * 	@return			string: the converted string
+	 * 	@return			s: the converted string
 	 */
 	string ConvertCase(string type, string toBeConverted)
 	{
@@ -78,5 +78,14 @@ namespace CPP_Helpers
 		}
 		return s;
 	}
+
+	/** GetArrayLength()        function: takes an array as an argument and retunrs it's length
+     *	@param T 	            takes in a template datatype as the array
+	 *
+	 * 	@return					N: integer representing the length
+	 */
+	template <typename T, std::size_t N>
+	constexpr std::size_t GetArrayLength (const T(&)[N])
+	{ return N; }
 }
 #endif
